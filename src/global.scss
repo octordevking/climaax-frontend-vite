@@ -1,0 +1,40 @@
+body * {
+    font-family: "montserrat" !important;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+}
+
+.font-museo,
+.font-museo * {
+    font-family: MuseoModerno !important;
+}
+
+.MuiContainer-root {
+    max-width: 1366px !important;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.m-auto {
+    margin: auto;
+}
+
+::-webkit-scrollbar {
+    width: 3px;
+    height: 3px; // Add this line to make the scrollbar thin for horizontal scrollbar
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d49fff50;
+    border-radius: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: #d49fff20;
+}

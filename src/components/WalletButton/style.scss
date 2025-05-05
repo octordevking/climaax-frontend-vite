@@ -1,0 +1,67 @@
+.wallet-container {
+    .btn-connect-wallet {
+        padding: 14px 20px;
+        color: white;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #FC8C1C 0%, #F63C3C 100%);
+        gap: 5px;
+
+        p {
+            font-size: 14px;
+            text-transform: none;
+        }
+    }
+
+    .account-container {
+        color: #FFF;
+        display: flex;
+        padding: 8px 15px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border-radius: 10px;
+        background: #100B2D;
+
+        .token-icon img {
+            width: 20px !important;
+        }
+
+        .hold-amount {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .account-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 28px;
+            background: #1A1537;
+            color: #ffffffa0;
+            text-transform: none;
+
+            .address {
+                font-size: 12px;
+                font-weight: 400;
+            }
+
+            .logout {
+                width: 25px;
+                height: 25px;
+                background: linear-gradient(90deg, #FC8C1C 0%, #F63C3C 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                color: #ffffffa0;
+
+                &>svg {
+                    width: 15px;
+                    height: 15px;
+                }
+            }
+        }
+    }
+}

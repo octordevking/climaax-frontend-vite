@@ -1,0 +1,52 @@
+$primary-color: #bb86fc;
+$secondary-color: #03dac6;
+$background-color: #121212;
+$card-background: #1a1a1a;
+$text-color: #e0e0e0;
+$border-color: #333;
+$hover-bg: rgba(255, 255, 255, 0.08);
+$border-radius: 12px;
+.trade-history-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: $border-radius;
+    table-layout: fixed;
+    overflow: auto;
+    color: $text-color;
+  
+    thead {
+      background: #333;
+  
+      th {
+        font-weight: bold;
+        text-align: center;
+        padding: 12px;
+        color: $primary-color;
+      }
+    }
+  
+    tbody {
+      tr {
+        transition: 0.3s ease-in-out;
+  
+        &:hover {
+          background: $hover-bg;
+        }
+  
+        td {
+          padding: 10px;
+          text-align: start;
+          color: $text-color;
+          border-bottom: 1px solid $border-color;
+        }
+      }
+    }
+  }
+  
+  // Loading Animation
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }

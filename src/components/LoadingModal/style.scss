@@ -1,0 +1,103 @@
+.modal-wrapper {
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(80vw, 500px);
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .MuiSvgIcon-root.MuiStepIcon-root {
+        &.Mui-active {
+            color: #3052ff !important;
+        }
+
+        &.Mui-completed {
+            color: #3052ff !important;
+        }
+    }
+
+    .MuiStepLabel-label {
+        line-height: 1;
+
+        &.Mui-active {
+            font-size: 16px;
+        }
+    }
+
+    .MuiButton-root.MuiButton-contained {
+        background-color: #3052ff !important;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .modal-detail {
+        position: relative;
+        background: white;
+
+        .qrcode {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+
+            img {
+                width: 100px;
+                height: 100px;
+                opacity: 0.2;
+            }
+        }
+
+        .qr {
+            width: 200px;
+            height: 200px;
+            background: white;
+
+            img {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    }
+
+    .modal-box {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .loading-indicator {
+        height: 20px !important;
+        position: absolute;
+        left: -2px;
+        top: calc(100% - 8px);
+    }
+}
+
+@media (max-width: 800px) {
+    .modal-wrapper {
+        .modal-content {
+            flex-direction: column;
+        }
+
+        .modal-box {
+            flex-direction: column;
+        }
+    }
+}

@@ -1,0 +1,370 @@
+$primary-color: #bb86fc;
+$secondary-color: #03dac6;
+$background-color: #121212;
+$card-background: #1a1a1a;
+$text-color: #e0e0e0;
+$border-color: #333;
+$hover-bg: rgba(255, 255, 255, 0.08);
+$border-radius: 12px;
+
+.home-box {
+    padding: 30px 0 60px 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    @media (max-width: 800px) {
+      padding-top: 0;
+    }
+    .staking-container{
+      display: flex;
+      align-items: stretch;
+      flex-direction: row;
+      justify-content: center;
+      width: 100%;
+      padding: 20px 0;
+      gap: 50px;
+    
+      .card {
+        width: 100%;
+        border-radius: 10px;
+        max-width: 640px;
+        min-width: 240px;
+        min-height: 100%;
+        height: auto;
+        justify-content: center;
+        background: #121212;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        color: white;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    
+        .card-header {
+          flex: 1;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          padding-bottom: none;
+          min-height: 10rem;
+
+          .wallet-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            transition: border 0.3s ease;
+          
+            &.inactive {
+              border-color: #fd3b3b;
+            }
+            
+            .wallet-address-title {
+              font-size: 20px;
+              color: white;
+            }
+
+            .wallet-info {
+              display: flex;
+              flex-direction: column;
+              overflow: hidden;
+              gap: 10px;
+          
+              .wallet-label {
+                font-size: 12px;
+                overflow: hidden;
+                max-width: 80%;
+                opacity: 0.5;
+              }
+              .wallet-address {
+                font-size: 14px;
+                color: #ccc;
+                overflow: hidden;
+              }
+              .wallet-balance {
+                font-size: 18px;
+                font-weight: 600;
+                color: white;
+              }
+              .wallet-status-text {
+                font-size: 13px;
+                color: #FC8C1C;
+              }
+            }
+          
+            .wallet-actions {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+          
+              .btn-get {
+                font-size: 12px;
+                background: linear-gradient(90deg, #FC8C1C, #F63C3C);
+                color: white;
+                font-weight: 600;
+                padding: 6px 10px;
+                border-radius: 8px;
+                text-transform: none;
+              }
+          
+              .help-tooltip {
+                cursor: help;
+                font-size: 18px;
+                color: #aaa;
+              }
+            }
+          }
+          .history-header{
+            flex-direction: column;
+            min-width: 100%;
+
+            .history-search-filterbox {
+              display: flex;
+              justify-content: space-between;
+              flex-wrap: wrap;
+              align-items: start;
+              min-width: 100%;
+              padding: 5px;
+              margin: 0px;
+
+              @media (max-width: 500px) {
+              flex-direction: column;
+              gap: 5px;
+              }
+            
+              .tab-container{
+                
+                .tab-item{ 
+                  background-color: #1a1a1a;
+                  color: #aaa;
+                }
+                .tab-item-selected{
+                  background-color: #03dac6;
+                  color: #000 !important;
+                  border-bottom: #1d3adf 2px solid;
+                  font-weight: 700;
+                }
+              }
+              .select-time-range{
+                display: flex;
+                align-items: center;
+                padding: 3px;
+                border-radius: 8px;
+                border:#aaa 1px solid;
+                color:#fff;
+                background-color: #1a1a1a;
+                min-width: 10rem;
+                
+              }
+              .MuiSvgIcon-root{
+                color: #aaa !important;
+              }
+            }
+          }
+          .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+          }
+          .card-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 10px;
+          }
+          .account-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: linear-gradient(180deg, #1c183a, #0f0c29);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+    
+            .address {
+              font-size: 13px;
+              color: rgba(255, 255, 255, 0.6);
+            }
+          }
+        }
+    
+        .card-body {
+          padding-top: 20px;
+    
+          .input-group {
+            position: relative;
+            border:rgba(255, 255, 255, 0.6) 1px solid;
+              border-radius: 12px;
+              min-height: 30px;
+              padding-left: 16px;
+              justify-content: space-between;
+
+              
+            .MuiInputBase-root {
+              width: 100%;
+              color: #fff;
+              font-size: 30px;
+    
+              fieldset {
+                border: 1px solid #1a1a1a;
+                border-radius: 12px;
+              }
+            }
+    
+            .btn-max {
+              position: absolute;
+              top: 50%;
+              right: 16px;
+              transform: translateY(-50%);
+              padding: 6px 12px;
+              color: #FC8C1C;
+              font-weight: 600;
+              font-size: 12px;
+              border-radius: 6px;
+              cursor: pointer;
+            }
+          }
+    
+          .stake-option {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 16px 10px 16px;
+            margin-top: 15px;
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+    
+            &:hover {
+              opacity: 1;
+              background: rgba(255, 255, 255, 0.07);
+            }
+    
+            &.selected {
+              border: 2px solid #1d3adf;
+              background-color: #121212;
+              color: #fff;
+            }
+    
+            .column-title {
+              font-size: 12px;
+              text-transform: uppercase;
+              font-weight: 500;
+              opacity: 0.6;
+            }
+    
+            .column-value {
+              font-size: 20px;
+              font-weight: 700;
+            }
+          }
+    
+          .btn-stake {
+            margin-top: 30px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #FC8C1C, #F63C3C);
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            text-transform: none;
+    
+            &::after {
+              content: '';
+              position: absolute;
+              bottom: -10px;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 80%;
+              height: 50%;
+              background: inherit;
+              filter: blur(15px);
+              opacity: 0.4;
+              z-index: -1;
+              border-radius: 12px;
+            }
+    
+            &:hover {
+              filter: brightness(1.1);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .amount-input.invalid {
+    color: #fd3b3b !important;
+  }
+  
+  .amount-input.valid {
+    color: white !important;
+  }
+
+  .table-container {
+    border-radius: $border-radius;
+    border-color: #bb86fc;
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
+    background: $card-background;
+    border: 1px solid $border-color;
+  }
+  
+  .history-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: $border-radius;
+    table-layout: fixed;
+    overflow: auto;
+    color: $text-color;
+  
+    thead {
+      background: #333;
+  
+      th {
+        font-weight: bold;
+        text-align: center;
+        padding: 12px;
+        color: $primary-color;
+      }
+    }
+  
+    tbody {
+      tr {
+        transition: 0.3s ease-in-out;
+  
+        &:hover {
+          background: $hover-bg;
+        }
+  
+        td {
+          padding: 10px;
+          text-align: center;
+          color: $text-color;
+          border-bottom: 1px solid $border-color;
+        }
+      }
+    }
+  }
+.MuiPaper-root {
+    background-color: $background-color;
+  
+  .MuiList-root {
+    font-size: 13px;
+    color: #fff;
+    background-color: $background-color !important;
+  }
+}
+a:hover {
+  color:#03dac6
+}
