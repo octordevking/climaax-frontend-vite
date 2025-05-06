@@ -193,8 +193,8 @@ export const connectLedgerWallet = async (steps, setSteps, setCurrentStep, setOp
 
 export const getVerifiedXRPNftsOfAccount = async (address) => {
     try {
-        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/nfts/verified-nfts?walletAddress=${address}`);
-        // const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/nfts/verified-nfts?walletAddress=${'r9ZW5tjbhKFLWxs4j1KqF61YSHAyDvo52D'}`);
+        // const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/nfts/verified-nfts?walletAddress=${address}`);
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/nfts/verified-nfts?walletAddress=${'r9ZW5tjbhKFLWxs4j1KqF61YSHAyDvo52D'}`);
         const data = await res.json();
 
         if (res.status !== 200) {

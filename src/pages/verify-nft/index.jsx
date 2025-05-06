@@ -56,13 +56,7 @@ const NFTTable = ({ nfts, loading, tabIndex, currentPage, setCurrentPage, pageSi
         <>
           <Typography variant="h6" className="table-title">Your NFTs</Typography>
           {totalPages > 1 && (
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-              
-              <Box display='inline-flex' alignItems="center" gap={3}>  
-                <Box display='inline-flex' gap={0.5} alignItems={'center'}> 
-                  <Checkbox defaultChecked={false} color='success'/>
-                  <Typography variant="body2" className="table-title">Verified</Typography>
-                </Box> 
+            <Box display="flex" justifyContent="right" alignItems="right" mb={2}>
                 <Pagination
                   count={totalPages}
                   page={currentPage}
@@ -81,7 +75,6 @@ const NFTTable = ({ nfts, loading, tabIndex, currentPage, setCurrentPage, pageSi
                     },
                   }}
                 />
-              </Box>
             </Box>
           )}
           <TableContainer className="nft-table">
