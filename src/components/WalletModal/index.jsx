@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Modal, Box, Typography, IconButton, Grid } from '@mui/material';
 import BluetoothIcon from '@mui/icons-material/Bluetooth';
 import UsbIcon from '@mui/icons-material/Usb';
@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { connectLedgerWallet, connectWallet } from '../../utils';
 import LoadingModal from '../LoadingModal';
 import { useAppContext } from '../../context/AppContext';
-import './index.scss';
+import './style.scss';
 
 const ModeSelectionModal = ({ open, onClose, setLedgerMode }) => {  
   return (
@@ -21,7 +21,7 @@ const ModeSelectionModal = ({ open, onClose, setLedgerMode }) => {
         <Box className="wallet-modal-header">
           <Typography variant="h6">Select Wallet</Typography>
           <IconButton onClick={onClose}>
-            <CloseIcon />
+            <CloseIcon className='close-icon'/>
           </IconButton>
         </Box>
         <Grid container spacing={2} className="wallet-options">
@@ -136,12 +136,12 @@ export default function WalletModal({ open, onClose, onSelect }) {
           <Box className="wallet-modal-header">
             <Typography variant="h6">Select Wallet</Typography>
             <IconButton onClick={onClose}>
-              <CloseIcon />
+              <CloseIcon className='close-icon'/>
             </IconButton>
           </Box>
           <Grid container spacing={2} className="wallet-options">
             {wallets.map((wallet) => (
-              <Grid item xs={6} key={wallet.key}>
+              <Grid item xs={12} key={wallet.key}>
                 <Box className="wallet-option" onClick={() => onSelect(wallet.key)}>
                   <img src={wallet.icon} alt={wallet.name} className="wallet-icon" />
                   <Typography variant="body1">{wallet.name}</Typography>

@@ -1,11 +1,12 @@
 .wallet-container {
+    display: flex;
     .btn-connect-wallet {
         padding: 14px 20px;
         color: white;
         border-radius: 10px;
         background: linear-gradient(90deg, #FC8C1C 0%, #F63C3C 100%);
         gap: 5px;
-
+        display: flex;
         p {
             font-size: 14px;
             text-transform: none;
