@@ -146,36 +146,47 @@ export default function Dashboard() {
 
   const processNfts = async (nfts, isSgb = false) => {
     if (!nfts || nfts.error) return [];
-    return isSgb
-      ? nfts.account_nfts.map((nft) => ({
-          id: `${nft.contract_address}_${nft.nft_id}`,
-          name: nft.name,
-          image: nft.image_url,
-          points: nft.points,
-          status: nft.isVerified ? '✅' : '❌',
-        }))
-      : await Promise.all(
-          nfts.account_nfts.map(async (nft) => {
-            const decodedUrl = getUrlFromEncodedUri(nft.uri || '');
-            let metadata = {};
-            try {
-              const res = await fetch(decodedUrl);
-              metadata = await res.json();
-            } catch (err) {
-              console.warn('Failed to fetch metadata for:', nft.nft_id, err);
-            }
-            const image = metadata?.image?.startsWith('ipfs://')
-              ? `https://ipfs.io/ipfs/${metadata.image.split('ipfs://')[1]}`
-              : metadata?.image;
-            return {
-              id: nft.nft_id,
-              name: metadata?.name || 'Unnamed',
-              image,
-              points: nft.points || 0,
-              status: nft.isVerified ? '✅' : '❌',
-            };
-          })
-        );
+
+    if (isSgb) {
+      const sgbNftData = nfts.account_nfts.map((nft) => ({
+        id: `${nft.contract_address}_${nft.nft_id}`,
+        name: nft.name,
+        image: nft.image_url,
+        points: nft.points,
+        status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
+      }));
+      return sgbNftData;
+    } else {
+      // Process XRP NFTs
+      setLoading(true);
+      const processedNfts = await Promise.all(
+        nfts.account_nfts.map(async (nft) => {
+          const decodedUrl = getUrlFromEncodedUri(nft.uri || '');
+          let metadata = {};
+
+          try {
+        const res = await fetch(decodedUrl);
+        metadata = await res.json();
+          } catch (err) {
+        console.warn('Failed to fetch metadata for:', nft.nft_id, err);
+          }
+
+          const image = metadata?.image?.startsWith('ipfs://')
+        ? `https://ipfs.io/ipfs/${metadata.image.split('ipfs://')[1]}`
+        : metadata?.image;
+
+          return {
+        id: nft.nft_id,
+        name: metadata?.name || 'Unnamed NFT',
+        image,
+        points: nft.points || 0,
+        status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
+          };
+        })
+      );
+      setLoading(false);
+      return processedNfts;
+    }
   };
 
   const verifyXrpNfts = async (address, nfts) => {
