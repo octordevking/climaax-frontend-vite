@@ -144,50 +144,104 @@ export default function Dashboard() {
   const { userVerifiedNfts, address, poolInfo } = useAppContext();
   const calculateTotalPoints = (nfts) => nfts?.calculatedPoints?.totalPoints || 0;
 
+  const getIpfsUrl = (ipfsUri) => {
+    const hash = ipfsUri.replace('ipfs://', '');
+    const gateways = [
+      `https://ipfs.io/ipfs/${hash}`,
+      `https://cloudflare-ipfs.com/ipfs/${hash}`,
+      `https://gateway.pinata.cloud/ipfs/${hash}`,
+      `https://nftstorage.link/ipfs/${hash}`
+    ];
+    return gateways;
+  };
+
+  const resolveFirstWorkingImage = async (ipfsUri) => {
+    const urls = getIpfsUrl(ipfsUri);
+    for (const url of urls) {
+      try {
+        const res = await fetch(url, { method: 'HEAD' }); // Only check if accessible
+        if (res.ok) return url;
+      } catch (e) {
+        console.warn(`Image fetch failed from: ${url}`, e);
+      }
+    }
+    return null;
+  };
+
+  const fetchWithFallback = async (urls) => {
+    for (const url of urls) {
+      try {
+        const res = await fetch(url, { method: 'GET' });
+        if (res.ok) return await res.json();
+      } catch (e) {
+        console.warn(`Failed to fetch from: ${url}`, e);
+      }
+    }
+    throw new Error('All IPFS gateways failed');
+  };
+
   const processNfts = async (nfts, isSgb = false) => {
     if (!nfts || nfts.error) return [];
-
+  
     if (isSgb) {
-      const sgbNftData = nfts.account_nfts.map((nft) => ({
+      return nfts.account_nfts.map((nft) => ({
         id: `${nft.contract_address}_${nft.nft_id}`,
         name: nft.name,
         image: nft.image_url,
         points: nft.points,
         status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
       }));
-      return sgbNftData;
-    } else {
-      // Process XRP NFTs
-      setLoading(true);
-      const processedNfts = await Promise.all(
-        nfts.account_nfts.map(async (nft) => {
-          const decodedUrl = getUrlFromEncodedUri(nft.uri || '');
-          let metadata = {};
-
-          try {
-        const res = await fetch(decodedUrl);
-        metadata = await res.json();
-          } catch (err) {
-        console.warn('Failed to fetch metadata for:', nft.nft_id, err);
-          }
-
-          const image = metadata?.image?.startsWith('ipfs://')
-        ? `https://ipfs.io/ipfs/${metadata.image.split('ipfs://')[1]}`
-        : metadata?.image;
-
-          return {
-        id: nft.nft_id,
-        name: metadata?.name || 'Unnamed NFT',
-        image,
-        points: nft.points || 0,
-        status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
-          };
-        })
-      );
-      setLoading(false);
-      return processedNfts;
     }
+  
+    setLoading(true);
+  
+    const concurrencyLimit = 5;
+    const results = [];
+    const executing = [];
+  
+    for (const nft of nfts.account_nfts) {
+      const p = (async () => {
+        const decodedUrl = nft.uri?.startsWith('ipfs://') ? getIpfsUrl(nft.uri) : [getUrlFromEncodedUri(nft.uri)];
+        let metadata = {};
+  
+        try {
+          metadata = await fetchWithFallback(decodedUrl);
+        } catch (err) {
+          console.warn('Metadata fetch failed:', nft.nft_id, err);
+        }
+        
+        let image = metadata?.image || '';
+        
+        if (image.startsWith('ipfs://')) {
+          image = await resolveFirstWorkingImage(image);
+        }
+    
+        return {
+          id: nft.nft_id,
+          name: metadata?.name || 'Unnamed NFT',
+          image,
+          points: nft.points || 0,
+          status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
+        };
+      })();
+  
+      results.push(p);
+  
+      if (concurrencyLimit <= nfts.account_nfts.length) {
+        const e = p.then(() => executing.splice(executing.indexOf(e), 1));
+        executing.push(e);
+        if (executing.length >= concurrencyLimit) {
+          await Promise.race(executing);
+        }
+      }
+    }
+  
+    const processedNfts = await Promise.all(results);
+  
+    setLoading(false);
+    return processedNfts;
   };
+  
 
   const verifyXrpNfts = async (address, nfts) => {
     if (!address) return;

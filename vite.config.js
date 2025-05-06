@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173, // Matches your CRACO devServer port
+    allowedHosts: ['1e15-89-187-161-220.ngrok-free.app'], // Add the host here
   },
   resolve: {
     alias: {

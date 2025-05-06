@@ -101,13 +101,16 @@ export const connectWallet = async (steps, setSteps, setCurrentStep, setOpenLoad
         }
 
         const payload = data.result;
+        console.log("Connecting to wallet payload: ", payload);
         if (payload) {
             const _steps = [...steps];
             _steps[0].qr_link = payload.refs.qr_png;
             setSteps(_steps);
+            console.log("Mobile: ", mobile);
 
             if (mobile) {
-                window.open(payload.next.always, "_blank");
+                    // iOS devices → use direct redirect
+                    window.location.href = payload.next.always;
             }
 
             const ws_url = payload.refs.websocket_status;
@@ -115,7 +118,7 @@ export const connectWallet = async (steps, setSteps, setCurrentStep, setOpenLoad
 
             webs.onmessage = async (e) => {
                 const event = JSON.parse(e.data);
-
+                console.log("WebSocket event: ", event);
                 if (event.signed) {
                     const payloadUuid = event.payload_uuidv4;
                     try {
