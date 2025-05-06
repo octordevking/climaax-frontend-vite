@@ -1,0 +1,10 @@
+.wallet-container button{
+    display: block;
+    margin: 0 auto; // Center the button on desktop
+    width: auto;
+
+    @media (max-width: 768px) { // Adjust for mobile
+        width: 100%; // Full width on mobile
+        margin: 0; // Remove auto margin for full width
+    }
+}

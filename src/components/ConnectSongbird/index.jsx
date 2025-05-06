@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { createThirdwebClient, defineChain } from "thirdweb";
 import { ConnectButton } from "thirdweb/react";
 import { createWallet } from "thirdweb/wallets";
+import "./style.scss";
 
 export default function SongbirdWalletConnect(){
     const client = createThirdwebClient({
