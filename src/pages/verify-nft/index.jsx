@@ -247,7 +247,7 @@ export default function Dashboard() {
   return (
     <DashboardLayout className="dashboard-container">
       <Box className="dashboard-header">
-        <NftListCarousel />
+        {/* <NftListCarousel /> */}
         <Tabs
           value={tabIndex}
           onChange={(_, newIndex) => setTabIndex(newIndex)}
