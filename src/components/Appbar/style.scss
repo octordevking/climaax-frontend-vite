@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: 27px;
+    padding-left: 30px;
     padding-right: 10px;
     gap: 20px;
     transition: all 0.3s ease-in-out;
@@ -30,8 +30,8 @@
 
         .title {
             color: white;
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 500;
 
             @media (max-width: 800px) {
                 color: #FC8C1C;
@@ -69,21 +69,21 @@
 .mobile-page-title {
     display: none;
     text-align: center;
-    padding: 20px 10px;
+    padding: 10px;
 
     @media (max-width: 800px) {
         display: block;
         margin-top: 70px;
 
         .title {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 500;
             color: white;
         }
 
         .description {
             color: #BAB9C3;
-            font-size: 14px;
+            font-size: 12px;
         }
     }
 }

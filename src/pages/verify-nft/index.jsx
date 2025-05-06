@@ -54,9 +54,10 @@ const NFTTable = ({ nfts, loading, tabIndex, currentPage, setCurrentPage, pageSi
         </Box>
       ) : (
         <>
+          <Typography variant="h6" className="table-title">Your NFTs</Typography>
           {totalPages > 1 && (
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-              <Typography variant="h6" className="table-title">Your NFTs</Typography>
+              
               <Box display='inline-flex' alignItems="center" gap={3}>  
                 <Box display='inline-flex' gap={0.5} alignItems={'center'}> 
                   <Checkbox defaultChecked={false} color='success'/>
