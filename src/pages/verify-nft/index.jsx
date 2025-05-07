@@ -28,7 +28,7 @@ import {
   sgbNftVerify,
 } from '../../utils';
 import SongbirdWalletConnect from '../../components/ConnectSongbird';
-import NftListCarousel from '../../components/NftListCarousel';
+import pLimit from 'p-limit';
 
 import './style.scss';
 
@@ -146,38 +146,21 @@ export default function Dashboard() {
 
   const getIpfsUrl = (ipfsUri) => {
     const hash = ipfsUri.replace('ipfs://', '');
-    const gateways = [
-      `https://ipfs.io/ipfs/${hash}`,
-      `https://cloudflare-ipfs.com/ipfs/${hash}`,
-      `https://gateway.pinata.cloud/ipfs/${hash}`,
-      `https://nftstorage.link/ipfs/${hash}`
-    ];
+    const gateways = `https://ipfs.io/ipfs/${hash}`
+      // `https://cloudflare-ipfs.com/ipfs/${hash}`,
+      // `https://gateway.pinata.cloud/ipfs/${hash}`,
+      // `https://nftstorage.link/ipfs/${hash}`
+    ;
     return gateways;
   };
 
-  const resolveFirstWorkingImage = async (ipfsUri) => {
-    const urls = getIpfsUrl(ipfsUri);
-    for (const url of urls) {
-      try {
-        const res = await fetch(url, { method: 'HEAD' }); // Only check if accessible
-        if (res.ok) return url;
-      } catch (e) {
-        console.warn(`Image fetch failed from: ${url}`, e);
-      }
-    }
-    return null;
-  };
-
-  const fetchWithFallback = async (urls) => {
-    for (const url of urls) {
+  const fetchWithFallback = async (url) => {
       try {
         const res = await fetch(url, { method: 'GET' });
         if (res.ok) return await res.json();
       } catch (e) {
         console.warn(`Failed to fetch from: ${url}`, e);
       }
-    }
-    throw new Error('All IPFS gateways failed');
   };
 
   const processNfts = async (nfts, isSgb = false) => {
@@ -195,53 +178,49 @@ export default function Dashboard() {
   
     setLoading(true);
   
-    const concurrencyLimit = 5;
-    const results = [];
-    const executing = [];
+    // const limit = pLimit(10); // Increase concurrency
+    const metadataCache = new Map();
+    const imageCache = new Map();
   
-    for (const nft of nfts.account_nfts) {
-      const p = (async () => {
-        const decodedUrl = nft.uri?.startsWith('ipfs://') ? getIpfsUrl(nft.uri) : [getUrlFromEncodedUri(nft.uri)];
-        let metadata = {};
-  
-        try {
-          metadata = await fetchWithFallback(decodedUrl);
-        } catch (err) {
-          console.warn('Metadata fetch failed:', nft.nft_id, err);
+    const processSingleNft = async (nft) => {
+      const decodedUrl = nft.uri?.startsWith('ipfs://') ? getIpfsUrl(nft.uri) : getUrlFromEncodedUri(nft.uri);
+      let metadata = {};
+      try {
+        if (metadataCache.has(decodedUrl)) {
+          metadata = await metadataCache.get(decodedUrl);
+        } else {
+          const promise = fetchWithFallback(decodedUrl);
+          metadataCache.set(decodedUrl, promise);
+          metadata = await promise;
         }
-        
-        let image = metadata?.image || '';
-        
-        if (image.startsWith('ipfs://')) {
-          image = await resolveFirstWorkingImage(image);
-        }
-    
-        return {
-          id: nft.nft_id,
-          name: metadata?.name || 'Unnamed NFT',
-          image,
-          points: nft.points || 0,
-          status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
-        };
-      })();
-  
-      results.push(p);
-  
-      if (concurrencyLimit <= nfts.account_nfts.length) {
-        const e = p.then(() => executing.splice(executing.indexOf(e), 1));
-        executing.push(e);
-        if (executing.length >= concurrencyLimit) {
-          await Promise.race(executing);
-        }
+      } catch (err) {
+        console.warn('Metadata fetch failed:', nft.nft_id, err);
       }
-    }
   
-    const processedNfts = await Promise.all(results);
-  
+      let image = metadata?.image || '';
+      
+      if (image.startsWith('ipfs://')) {
+        image = image.replace('ipfs://', 'https://cdn.xrplexplorer.com/image/');
+      } else {
+        image = nft.image;
+      }
+      
+      console.log('TimeLine:', Date.now());
+      return {
+        id: nft.nft_id,
+        name: metadata?.name || 'Unknown',
+        image,
+        points: nft.points || 0,
+        status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
+      };
+    };
+    
+    const processedNfts = await Promise.all(
+      nfts.account_nfts.map((nft) => processSingleNft(nft))
+    );
     setLoading(false);
     return processedNfts;
   };
-  
 
   const verifyXrpNfts = async (address, nfts) => {
     if (!address) return;

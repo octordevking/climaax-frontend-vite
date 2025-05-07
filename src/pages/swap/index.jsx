@@ -3,15 +3,14 @@ import './style.scss';
 import { Box, Typography, Grid, Tabs, Tab, TextField } from '@mui/material';
 import DashboardLayout from '../../components/DashboardLayout';
 import { useAppContext } from '../../context/AppContext';
-import { connectWallet, createWebsocket, isMobile, getTrustLine, getTradeHistory, getSwapPayload } from '../../utils';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { createWebsocket, isMobile, getTrustLine, getTradeHistory, getSwapPayload } from '../../utils';
 import LoadingModal from '../../components/LoadingModal';
 import toast from 'react-hot-toast';
 import TradingViewChart from '../../components/TradingViewChart';
 import TradeHistoryTable from '../../components/TradeHistoryTable';
 
 export default function Swap() {
-  const { address, amountToken, setAddress, amountXrp, trustLine, setTrustLineStatus, getTokenAmount } = useAppContext();
+  const { address, amountToken, walletType, amountXrp, trustLine, setTrustLineStatus, getTokenAmount } = useAppContext();
   const [tabIndex, setTabIndex] = useState(0);
   const [tradeHistory, setTradeHistory] = useState([]);
   const [tokenPrice, setTokenPrice] = useState(0);
@@ -66,6 +65,12 @@ export default function Swap() {
       if (!trustLineData) {
         closeLoadingModal();
         toast.error("Can't set trustline. Please try again later.");
+        return;
+      }
+
+      if (walletType !== "xumm") {
+        toast.error("You need to use XAMAN wallet to set trustline.");
+        closeLoadingModal();
         return;
       }
 
@@ -130,6 +135,12 @@ export default function Swap() {
   const onSwap = async () => {
     if (!address) {
       toast.error("Please connect your wallet");
+      return;
+    }
+
+    if (walletType !== "xumm") {
+      toast.error("You need to use XAMAN wallet to swap.");
+      closeLoadingModal();
       return;
     }
 

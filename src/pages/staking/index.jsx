@@ -94,6 +94,12 @@ export default function Home() {
         return;
       }
 
+      if(walletType !== "xumm") {
+        toast.error("Please use Xaman wallet to stake");
+        closeLoadingModal();
+        return;
+      }
+
       const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/stake/payload`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
