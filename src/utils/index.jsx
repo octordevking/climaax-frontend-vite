@@ -43,6 +43,11 @@ export const getAddress = () => {
     return data;
 }
 
+export const getWalletType = () => {
+    const data = localStorage.getItem("walletType");
+    return data;
+}
+
 export const round = (value, decimal = 6) => {
     return (value * 10 ** decimal).toFixed(0) / (10 ** decimal);
 }
@@ -138,6 +143,7 @@ export const connectWallet = async (steps, setSteps, setCurrentStep, setOpenLoad
                         if ("xrpAddress" in checkSignData.result) {
                             localStorage.setItem("address", checkSignData.result.xrpAddress);
                             setAddress(checkSignData.result.xrpAddress);
+                            localStorage.setItem("walletType", "xumm");
                             setWalletType("xumm");
                         }
 
@@ -183,6 +189,8 @@ export const connectLedgerWallet = async (steps, setSteps, setCurrentStep, setOp
             setCurrentStep(2);
             toast.success("Ledger wallet connected successfully!");
             setWalletType("ledger");
+            localStorage.setItem("address", address);
+            localStorage.setItem("walletType", "ledger");
         } else {
             throw new Error("Failed to get address from Ledger.");
         }

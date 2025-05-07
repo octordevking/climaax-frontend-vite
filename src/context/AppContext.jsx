@@ -7,7 +7,7 @@ import '../index.css';
 import "../global.scss";
 // import Home from "./pages/staking";
 import { Toaster, toast } from 'react-hot-toast';
-import { getAddress, getVerifiedXRPNftsOfAccount, round, getValidatedNfts, fetchPoolInfo } from '../utils';
+import { getAddress, getVerifiedXRPNftsOfAccount, round, getValidatedNfts, fetchPoolInfo, getWalletType } from '../utils';
 // import Swap from './pages/swap';
 // import Verifying from './pages/verify-nft';
 
@@ -22,7 +22,7 @@ export const AppProvider = ({ children }) => {
   const [nfts, setNfts] = useState([]);
   const [userVerifiedNfts, setUserVerifiedNfts] = useState([]);
   const [poolInfo, setPoolInfo] = useState({});
-  const [walletType, setWalletType] = useState(null);
+  const [walletType, setWalletType] = useState(getWalletType);
 
   const fetchData = async (url, errorMessage, callback) => {
     try {

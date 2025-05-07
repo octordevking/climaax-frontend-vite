@@ -16,6 +16,7 @@ export default function WalletButton() {
     const onLogout = (e) => {
         e.stopPropagation();
         localStorage.removeItem('address');
+        localStorage.removeItem('walletType');
         setAddress(null);
         setAmountToken(0);
         setWalletType(null);

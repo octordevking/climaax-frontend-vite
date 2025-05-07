@@ -144,25 +144,6 @@ export default function Dashboard() {
   const { userVerifiedNfts, address, poolInfo } = useAppContext();
   const calculateTotalPoints = (nfts) => nfts?.calculatedPoints?.totalPoints || 0;
 
-  const getIpfsUrl = (ipfsUri) => {
-    const hash = ipfsUri.replace('ipfs://', '');
-    const gateways = `https://ipfs.io/ipfs/${hash}`
-      // `https://cloudflare-ipfs.com/ipfs/${hash}`,
-      // `https://gateway.pinata.cloud/ipfs/${hash}`,
-      // `https://nftstorage.link/ipfs/${hash}`
-    ;
-    return gateways;
-  };
-
-  const fetchWithFallback = async (url) => {
-      try {
-        const res = await fetch(url, { method: 'GET' });
-        if (res.ok) return await res.json();
-      } catch (e) {
-        console.warn(`Failed to fetch from: ${url}`, e);
-      }
-  };
-
   const processNfts = async (nfts, isSgb = false) => {
     if (!nfts || nfts.error) return [];
   
@@ -175,51 +156,16 @@ export default function Dashboard() {
         status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
       }));
     }
-  
-    setLoading(true);
-  
-    // const limit = pLimit(10); // Increase concurrency
-    const metadataCache = new Map();
-    const imageCache = new Map();
-  
-    const processSingleNft = async (nft) => {
-      const decodedUrl = nft.uri?.startsWith('ipfs://') ? getIpfsUrl(nft.uri) : getUrlFromEncodedUri(nft.uri);
-      let metadata = {};
-      try {
-        if (metadataCache.has(decodedUrl)) {
-          metadata = await metadataCache.get(decodedUrl);
-        } else {
-          const promise = fetchWithFallback(decodedUrl);
-          metadataCache.set(decodedUrl, promise);
-          metadata = await promise;
-        }
-      } catch (err) {
-        console.warn('Metadata fetch failed:', nft.nft_id, err);
-      }
-  
-      let image = metadata?.image || '';
-      
-      if (image.startsWith('ipfs://')) {
-        image = image.replace('ipfs://', 'https://cdn.xrplexplorer.com/image/');
-      } else {
-        image = nft.image;
-      }
-      
-      console.log('TimeLine:', Date.now());
-      return {
-        id: nft.nft_id,
-        name: metadata?.name || 'Unknown',
-        image,
-        points: nft.points || 0,
-        status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
-      };
-    };
-    
-    const processedNfts = await Promise.all(
-      nfts.account_nfts.map((nft) => processSingleNft(nft))
-    );
-    setLoading(false);
-    return processedNfts;
+
+    const nftlist = nfts.account_nfts.map((nft) => ({
+      id: nft.nft_id,
+      name: nft.metadata.name,
+      image: (nft.metadata.image_url || nft.metadata.image).replace('ipfs://', 'https://cdn.xrplexplorer.com/image/').replace('ipfs/', ''),
+      points: nft.points,
+      status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
+    }));
+    console.log('NFT list:', nftlist);
+    return nftlist;
   };
 
   const verifyXrpNfts = async (address, nfts) => {
