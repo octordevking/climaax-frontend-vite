@@ -28,7 +28,6 @@ import {
   sgbNftVerify,
 } from '../../utils';
 import SongbirdWalletConnect from '../../components/ConnectSongbird';
-import pLimit from 'p-limit';
 
 import './style.scss';
 
@@ -43,7 +42,7 @@ const InfoCard = ({ title, value }) => (
 
 const NFTTable = ({ nfts, loading, tabIndex, currentPage, setCurrentPage, pageSize = 10 }) => {
   const totalPages = Math.ceil(nfts.length / pageSize);
-  const paginatedNFTs = nfts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const paginatedNFTs = (nfts.length === 0 && !loading) ?  [] : nfts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const handlePageChange = (_, value) => setCurrentPage(value);
 
   return (
@@ -145,8 +144,8 @@ export default function Dashboard() {
   const calculateTotalPoints = (nfts) => nfts?.calculatedPoints?.totalPoints || 0;
 
   const processNfts = async (nfts, isSgb = false) => {
-    if (!nfts || nfts.error) return [];
-  
+    if (!nfts || nfts.error ) return [];
+    setLoading(true);
     if (isSgb) {
       return nfts.account_nfts.map((nft) => ({
         id: `${nft.contract_address}_${nft.nft_id}`,
@@ -164,7 +163,8 @@ export default function Dashboard() {
       points: nft.points,
       status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
     }));
-    console.log('NFT list:', nftlist);
+    
+    setLoading(false);
     return nftlist;
   };
 
@@ -194,6 +194,8 @@ export default function Dashboard() {
     if (userVerifiedNfts?.account_nfts) {
       processNfts(userVerifiedNfts).then(setFormattedNfts);
       verifyXrpNfts(address, userVerifiedNfts);
+    } else{
+      setFormattedNfts([]);
     }
     setTotalXRPPoints(calculateTotalPoints(userVerifiedNfts));
   }, [userVerifiedNfts]);
@@ -203,6 +205,8 @@ export default function Dashboard() {
       processNfts(sgbVerifiedNfts, true).then(setFormattedSgbNfts);
       setTotalSgbPoint(calculateTotalPoints(sgbVerifiedNfts));
       verifySgbNfts(wallet.getAccount().address, sgbVerifiedNfts, address);
+    } else {
+      setTotalSgbPoint(0);
     }
   }, [sgbVerifiedNfts]);
 
