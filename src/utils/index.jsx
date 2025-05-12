@@ -236,8 +236,8 @@ export const getVerifiedSGBNftsOfAccount  = async (address) => {
             return ;
         }
         const decodedAddress = address.toLowerCase();
-        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/nfts/sgb/verified-nfts?sgbAddress=${'0xa29073e603114ecdcac2a0930190db14bdd54658'}`);
-        // const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/nfts/sgb/verified-nfts?sgbAddress=${decodedAddress}`);
+        // const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/nfts/sgb/verified-nfts?sgbAddress=${'0xa29073e603114ecdcac2a0930190db14bdd54658'}`);
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/nfts/sgb/verified-nfts?sgbAddress=${decodedAddress}`);
         const data = await res.json();
 
         if (res.status !== 200) {
