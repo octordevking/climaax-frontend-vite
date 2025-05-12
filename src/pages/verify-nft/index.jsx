@@ -147,6 +147,7 @@ export default function Dashboard() {
     if (!nfts || nfts.error ) return [];
     setLoading(true);
     if (isSgb) {
+      setLoading(false);
       return nfts.account_nfts.map((nft) => ({
         id: `${nft.contract_address}_${nft.nft_id}`,
         name: nft.name,
@@ -154,6 +155,7 @@ export default function Dashboard() {
         points: nft.points,
         status: nft.isVerified ? 'Verified ✅' : 'Not Verified ❌',
       }));
+      
     }
 
     const nftlist = nfts.account_nfts.map((nft) => ({
